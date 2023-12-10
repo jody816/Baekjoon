@@ -10,6 +10,7 @@ class Solution {
 
         int count = 0;
 
+        
         for (int i = 0; i < privacies.length; i++) {
             String[] p = privacies[i].split(" ");
             LocalDate pDate = LocalDate.parse(p[0], formatter);
