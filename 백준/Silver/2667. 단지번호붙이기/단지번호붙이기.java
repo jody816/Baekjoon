@@ -12,6 +12,7 @@ public class Main {
   static int[] dy = {-1, 1, 0, 0};
 
   static int count = 1;
+  static Queue<Integer> queue = new LinkedList<>();
   static ArrayList<Integer> result = new ArrayList<>();
 
   public static void main(String[] args) throws IOException {
@@ -39,13 +40,13 @@ public class Main {
         // 1이고 false 여야 탐색
         if (board[x][y] == 1 && !visited[x][y]) {
 
-          dfs(x, y);
+          bfs(x, y);
           result.add(count);
           count = 1;
         }
       }
     }
-      
+
     Collections.sort(result);
 
     bw.write(result.size() + "\n");
@@ -56,20 +57,29 @@ public class Main {
     bw.close();
   }
 
-  private static void dfs(int x, int y) {
+  private static void bfs(int x, int y) {
 
     visited[x][y] = true;
+    queue.add(x);
+    queue.add(y);
 
-    // 4 방향 탐색
-    for (int i = 0; i < 4; i++) {
-      int newX = dx[i] + x;
-      int newY = dy[i] + y;
+    while (!queue.isEmpty()) {
+      int xx = queue.poll();
+      int yy = queue.poll();
+      
+      // 4 방향 탐색
+      for (int i = 0; i < 4; i++) {
+        int newX = dx[i] + xx;
+        int newY = dy[i] + yy;
 
-      if (newX >= 0 && newY >= 0 && newX < board.length && newY < board.length
-      && !visited[newX][newY] && board[newX][newY] == 1) {
+        if (newX >= 0 && newY >= 0 && newX < board.length && newY < board.length
+            && !visited[newX][newY] && board[newX][newY] == 1) {
 
-        count++;
-        dfs(newX, newY);
+          count++;
+          visited[newX][newY] = true;
+          queue.offer(newX);
+          queue.offer(newY);
+        }
       }
     }
   }
