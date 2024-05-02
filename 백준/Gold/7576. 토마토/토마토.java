@@ -8,6 +8,7 @@ public class Main {
   static int[][] box;
   static int[] x = {0, 0, 1, -1};
   static int[] y = {1, -1, 0, 0};
+  static boolean[][] visit;
   static Queue<int[]> queue = new LinkedList<>();
   static int result = 0;
 
@@ -21,6 +22,7 @@ public class Main {
     m = Integer.parseInt(st.nextToken());
 
     box = new int[m][n];
+    visit = new boolean[m][n];
 
     for (int i = 0; i < m; i++) {
       box[i] = Arrays.stream(br.readLine().split(" "))
@@ -28,8 +30,8 @@ public class Main {
 
       for (int j = 0; j < n; j++) {
         if (box[i][j] == 1) {
+          visit[i][j] = true;
           queue.offer(new int[]{i, j});
-          result = 1;
         }
       }
     }
@@ -38,6 +40,7 @@ public class Main {
 
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
+        result = Math.max(result, box[i][j]);
 
         if (box[i][j] == 0) {
           bw.write(String.valueOf(-1));
@@ -57,23 +60,18 @@ public class Main {
 
     while (!queue.isEmpty()) {
 
-      int l = queue.size();
+      int[] start = queue.poll();
 
-      for (int k = 0; k < l; k++) {
+      for (int i = 0; i < 4; i++) {
+        int X = start[0] + x[i];
+        int Y = start[1] + y[i];
 
-        int[] start = queue.poll();
+        if (X >= 0 && X < m && Y >= 0 && Y < n
+            && box[X][Y] == 0 && !visit[X][Y]) {
 
-        for (int i = 0; i < 4; i++) {
-          int X = start[0] + x[i];
-          int Y = start[1] + y[i];
-
-          if (X >= 0 && X < m && Y >= 0 && Y < n && box[X][Y] == 0) {
-
-            queue.offer(new int[]{X, Y});
-            box[X][Y] = box[start[0]][start[1]] + 1;
-
-            result = Math.max(box[X][Y], result);
-          }
+          queue.offer(new int[]{X, Y});
+          visit[X][Y] = true;
+          box[X][Y] = box[start[0]][start[1]] + 1;
         }
       }
     }
