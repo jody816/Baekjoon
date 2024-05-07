@@ -4,21 +4,19 @@ import java.io.*;
 public class Main {
 
   static int n;
-  static long[] arr;
-  static int[] cal;
-  static long max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+  static int[] arr;
+  static int[] operator;
+  static int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
 
   public static void main(String[] args) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
     n = Integer.parseInt(br.readLine());
-
     arr = Arrays.stream(br.readLine().split(" "))
-            .mapToLong(Long::parseLong).toArray();
-
-    cal = Arrays.stream(br.readLine().split(" "))
-            .mapToInt(Integer::parseInt).toArray();
+        .mapToInt(Integer::parseInt).toArray();
+    operator = Arrays.stream(br.readLine().split(" "))
+        .mapToInt(Integer::parseInt).toArray();
 
     dfs(arr[0], 1);
 
@@ -27,26 +25,27 @@ public class Main {
     bw.close();
   }
 
-  static void dfs(long sum, int depth) {
-    if (depth == n) {
+  static private void dfs(int sum, int depth) {
+    if (depth == arr.length) {
       max = Math.max(max, sum);
       min = Math.min(min, sum);
       return;
     }
 
-    for (int i = 0; i < 4; i++) {
-      if (cal[i] > 0) {
-        cal[i]--;
+    for (int j = 0; j < 4; j++) {
 
-        switch (i) {
+      if (operator[j] > 0) {
 
+        operator[j]--;
+
+        switch (j) {
           case 0: dfs(sum + arr[depth], depth+1); break;
           case 1: dfs(sum - arr[depth], depth+1); break;
           case 2: dfs(sum * arr[depth], depth+1); break;
           case 3: dfs(sum / arr[depth], depth+1); break;
         }
 
-        cal[i]++;
+        operator[j]++;
       }
     }
   }
