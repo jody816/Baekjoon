@@ -1,44 +1,52 @@
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.*;
 class Solution {
-    public String solution(String[] survey, int[] choices) {
-        Map<String, Integer> map = new HashMap<>();
-        map.put("R", 0);
-        map.put("T", 0);
-        map.put("C", 0);
-        map.put("F", 0);
-        map.put("J", 0);
-        map.put("M", 0);
-        map.put("A", 0);
-        map.put("N", 0);
+    static Map<Character, Integer> map = new HashMap<>();
+  static StringBuilder sb = new StringBuilder();
+  static String[] indicator = {"RT",  "CF", "JM", "AN"};
 
-        String[] pointer = {"RT", "CF", "JM", "AN"};
+  public String solution(String[] survey, int[] choices) {
+    map.put('R', 0);
+    map.put('T', 0);
+    map.put('C', 0);
+    map.put('F', 0);
+    map.put('J', 0);
+    map.put('M', 0);
+    map.put('A', 0);
+    map.put('N', 0);
 
-        for (int i = 0; i < survey.length; i++) {
+    for (int i = 0; i < survey.length; i++) {
 
-            String a = String.valueOf(survey[i].charAt(0));
-            String b = String.valueOf(survey[i].charAt(1));
+      char first = survey[i].charAt(0);
+      char second = survey[i].charAt(1);
 
-            if (choices[i] < 4) {
-                map.replace(a, map.get(a)+(4-choices[i]));
-            } else if (choices[i] >  4) {
-                map.replace(b, map.get(b)+(choices[i]-4));
-            }
-        }
+      if (choices[i] > 4) {
+        map.put(second, map.get(second) + (choices[i] % 4));
 
-        StringBuilder result = new StringBuilder();
-
-        for (String s : pointer) {
-            String a = String.valueOf(s.charAt(0));
-            String b = String.valueOf(s.charAt(1));
-
-            if (map.get(a) >= map.get(b))
-                result.append(a);
-            else
-                result.append(b);
-        }
-
-        return result.toString();
+      } else if (choices[i] < 4) {
+        map.put(first, map.get(first) + (4 - choices[i]));
+      }
     }
+
+//    map.forEach((key, value) -> {
+//      System.out.println(key + ": " + value);
+//    });
+
+    for (String s : indicator) {
+
+      char first = s.charAt(0);
+      char second = s.charAt(1);
+
+      if (map.get(first) > map.get(second)) {
+        sb.append(first);
+
+      } else if (map.get(first) < map.get(second)){
+        sb.append(second);
+
+      } else {
+        sb.append(first);
+      }
+    }
+
+    return sb.toString();
+  }
 }
