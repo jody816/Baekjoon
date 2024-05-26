@@ -1,14 +1,29 @@
-import java.util.Arrays;
+import java.util.*;
+import java.util.Map.Entry;
+
 class Solution {
+    
+    static Map<String, Integer> map = new HashMap<>();
+    
     public String solution(String[] participant, String[] completion) {
-        Arrays.sort(participant);
-        Arrays.sort(completion);
-
-        for (int i = 0; i < completion.length; i++) {
-            if (!completion[i].equals(participant[i]))
-                return participant[i];
+       
+        for (String key : participant) {
+            map.put(key, map.getOrDefault(key, 1) + 1);
         }
-
-        return participant[participant.length-1];
+        
+        for (String key : completion) {
+            map.put(key, map.get(key) - 1);
+        }
+        
+        int max = Collections.max(map.values());
+        
+        for (Entry<String, Integer> entrySet : map.entrySet()) {
+            
+            if (entrySet.getValue() == max) {
+                return entrySet.getKey();
+            }
+        }
+        
+        return null;
     }
 }
