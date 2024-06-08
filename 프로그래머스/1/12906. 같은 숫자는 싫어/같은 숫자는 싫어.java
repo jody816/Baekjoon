@@ -1,18 +1,21 @@
 import java.util.*;
-import java.util.Stack;
-public class Solution {
-    public int[] solution(int []arr) {
-        Stack<Integer> stack = new Stack<>();
-       stack.add(arr[0]);
-       for (int i = 1; i < arr.length; i++) {
-         if (stack.peek() != arr[i]) {
-           stack.add(arr[i]);
-         }
-       }
 
-       int[] result = new int[stack.size()];
-       for (int i = stack.size() - 1; i >= 0; i--)
-         result[i] = stack.pop();
-       return result;
+public class Solution {
+    
+    static Deque<Integer> q = new LinkedList<>();
+    
+    public int[] solution(int []arr) {
+        
+        q.offer(arr[0]);
+        
+        for (int i = 1; i < arr.length; i++) {
+            
+            if (q.peekLast() != arr[i]) {
+                q.offer(arr[i]);
+            }
+        }
+        
+        // intValue: Integer 객체의 값을 정수로 변환하기 위함으로 사용
+        return q.stream().mapToInt(Integer::intValue).toArray();
     }
 }
