@@ -1,28 +1,35 @@
 import java.util.*;
 
 class Solution {
-    static int[] boat = new int[2];
     public int solution(int[] people, int limit) {
-        int answer = 0;
-
-    Arrays.sort(people);
-
-    int idx = 0;
-
-    for (int i = people.length-1; i >= 0; i--) {
-
-      if (idx > i) {
-        break;
-      }
-
-      int sum = people[i] + people[idx];
-
-      if (sum <= limit) {
-        idx++;
-      }
-      answer++;
-    }
-
-    return answer;
+        Arrays.sort(people);
+        
+        int result = 0;
+        int flag = 0;
+        int sum = people[flag];
+        
+        for (int i = people.length-1; i >= 0; i--) {
+            if (flag >= i) {
+                if (sum > 0) {
+                    result++;
+                }
+                break;
+            } else {
+                sum = people[flag];
+            }
+            
+            sum += people[i];
+            
+            if (sum > limit) {
+                result++;
+            } else if (sum == limit) {
+                sum = 0;
+                result++;
+            } else {
+                flag++;
+            }
+        }
+        
+        return result;
     }
 }
