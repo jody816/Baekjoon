@@ -1,37 +1,35 @@
 import java.util.*;
-
 class Solution {
-    
+    static Set<String> set = new HashSet<>();
+    static int max = 0;
+    static boolean[] visit;
     public String solution(String number, int k) {
-        char[] arr = number.toCharArray();
-
-        StringBuilder sb = new StringBuilder();
+        visit = new boolean[number.length()];
+        dfs(number, k, "");
         
-        int len = number.length() - k;
-        
-        int checkIdx = 0;
-
-        // (7758)41
-        // 7 (7584)1
-        // 77 (5841)
-        // 778 (41)
-        // 7784
-        
-        for(int i = 0; i < len; i++) {
-            char max = '0';
-            for (int j = checkIdx; j <= i + k; j++) {
-                
-                // System.out.print(arr[i] + " ");
-                if (max < arr[j]) {
-                    checkIdx = j + 1;
-                    max = arr[j];
-                }
-                // System.out.println();
-            }
-            
-            sb.append(max);
+        for (String i : set) {
+            max = Math.max(max, Integer.parseInt(i));
         }
         
-        return sb.toString();
+        return String.valueOf(max);
+    }
+    
+    static void dfs(String number, int k, String depth) {
+        if (depth.length()+1 == k) {
+            if (!set.contains(depth)) {
+                set.add(depth);
+            }
+            
+            return;
+        }
+        
+        for (int i = 0; i < number.length(); i++) {
+            
+            if (!visit[i]) {
+                visit[i] = true;
+                dfs(number, k, depth+String.valueOf(number.charAt(i)));
+                visit[i] = false;
+            }
+        }
     }
 }
