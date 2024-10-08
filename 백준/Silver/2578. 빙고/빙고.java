@@ -1,89 +1,105 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args){
-        Scanner stdIn = new Scanner(System.in);
 
-        ArrayList<Integer> board = new ArrayList<>(25);
+    static int[][] board = new int[5][5];
+    static boolean[][] correct = new boolean[5][5];
 
-        int x;
-        for (int i = 0; i < 25; i++)
-        {
-            do {
-                x = stdIn.nextInt();
-            }while (x > 25 || x < 1 || board.contains(x));
-            board.add(x);
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        for (int i = 0; i < 5; i++) {
+            board[i] = Arrays.stream(br.readLine().split(" "))
+                    .mapToInt(Integer::parseInt).toArray();
         }
 
-        ArrayList<Integer> mc = new ArrayList<>(25);
-        for (int i = 0; i < 25; i++)
-        {
-            do {
-                x = stdIn.nextInt();
-            }while (x > 25 || x < 1 || mc.contains(x));
-            mc.add(x);
+        for (int i = 0; i < 5; i++) {
+            int[] numbers = Arrays.stream(br.readLine().split(" "))
+                    .mapToInt(Integer::parseInt).toArray();
+
+            for (int r = 0; r < 5; r++) {
+                markNumber(numbers[r]);
+                boolean check = checkBingo();
+
+                if (check) {
+                    bw.write(String.valueOf(i * 5 + (r + 1)));
+                    bw.flush();
+                    bw.close();
+                    return;
+                }
+            }
         }
+    }
 
-        int a = 0;
-        int b = 0;
-        int c = 0;
-        int d = 0;
-        int e = 0;
-        int f = 0;
-        int g = 0;
-        int h = 0;
-        int j = 0;
-        int k = 0;
-        int l = 0;
-        int m = 0;
+    static void markNumber(int num) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (board[i][j] == num) {
+                    correct[i][j] = true;
+                    return;
+                }
+            }
+        }
+    }
 
+    static boolean checkBingo() {
         int count = 0;
-        for (int i = 0; i < 25; i++)
-        {
-            board.set(board.indexOf(mc.get(i)), 0);
-            count++;
 
-            if (board.get(0) == 0 && board.get(1) == 0 && board.get(2) == 0 && board.get(3) == 0 && board.get(4) == 0)
-                a = 1;
+        // 가로
+        for (int i = 0; i < 5; i++) {
+            if (isRowBingo(i)) count++;
+        }
 
-            if (board.get(5) == 0 && board.get(6) == 0 && board.get(7) == 0 && board.get(8) == 0 && board.get(9) == 0)
-                b = 1;
+        // 세로
+        for (int i = 0; i < 5; i++) {
+            if (isColBingo(i)) count++;
+        }
 
-            if (board.get(10) == 0 && board.get(11) == 0 && board.get(12) == 0 && board.get(13) == 0 && board.get(14) == 0)
-                c = 1;
+        // 대각선
+        count += countDiagonalBingo();
 
-            if (board.get(15) == 0 && board.get(16) == 0 && board.get(17) == 0 && board.get(18) == 0 && board.get(19) == 0)
-                d = 1;
+        return count >= 3;
+    }
 
-            if (board.get(20) == 0 && board.get(21) == 0 && board.get(22) == 0 && board.get(23) == 0 && board.get(24) == 0)
-                e = 1;
+    static boolean isRowBingo(int row) {
+        for (int i = 0; i < 5; i++) {
+            if (!correct[row][i]) return false;
+        }
+        return true;
+    }
 
-            if (board.get(0) == 0 && board.get(5) == 0 && board.get(10) == 0 && board.get(15) == 0 && board.get(20) == 0)
-                f = 1;
+    static boolean isColBingo(int col) {
+        for (int i = 0; i < 5; i++) {
+            if (!correct[i][col]) return false;
+        }
+        return true;
+    }
 
-            if (board.get(1) == 0 && board.get(6) == 0 && board.get(11) == 0 && board.get(16) == 0 && board.get(21) == 0)
-                g = 1;
+    // 대각선 빙고 확인 함수
+    static int countDiagonalBingo() {
+        int diagCount = 0;
 
-            if (board.get(2) == 0 && board.get(7) == 0 && board.get(12) == 0 && board.get(17) == 0 && board.get(22) == 0)
-                h = 1;
-
-            if (board.get(3) == 0 && board.get(8) == 0 && board.get(13) == 0 && board.get(18) == 0 && board.get(23) == 0)
-                j = 1;
-
-            if (board.get(4) == 0 && board.get(9) == 0 && board.get(14) == 0 && board.get(19) == 0 && board.get(24) == 0)
-                k = 1;
-
-            if (board.get(0) == 0 && board.get(6) == 0 && board.get(12) == 0 && board.get(18) == 0 && board.get(24) == 0)
-                l = 1;
-
-            if (board.get(4) == 0 && board.get(8) == 0 && board.get(12) == 0 && board.get(16) == 0 && board.get(20) == 0)
-                m = 1;
-
-            if (a+b+c+d+e+f+g+h+j+k+l+m >= 3){
-                System.out.println(count);
+        boolean diag1 = true;
+        for (int i = 0; i < 5; i++) {
+            if (!correct[i][i]) {
+                diag1 = false;
                 break;
             }
         }
+        if (diag1) diagCount++;
+
+        boolean diag2 = true;
+        for (int i = 0; i < 5; i++) {
+            if (!correct[i][4 - i]) {
+                diag2 = false;
+                break;
+            }
+        }
+        if (diag2) diagCount++;
+
+        return diagCount;
     }
 }
