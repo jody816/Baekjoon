@@ -31,7 +31,7 @@ class Solution {
                         countSet.add(preNum - postNum);
                         countSet.add(preNum * postNum);
 
-                        if(preNum != 0 && postNum != 0)
+                        if(postNum != 0)
                             countSet.add(preNum / postNum);
                     }
                 }
