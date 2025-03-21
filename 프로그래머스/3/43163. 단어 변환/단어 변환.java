@@ -1,40 +1,36 @@
 class Solution {
     
     static boolean[] visit;
-    static int count = 0;
-    
+    static int result = 0;
     public int solution(String begin, String target, String[] words) {
         
         visit = new boolean[words.length];
-        
         dfs(begin, target, words, 0);
-        return count;
+        
+        return result;
     }
     
-    static void dfs(String begin, String target, String[] words, int c) {
+    static void dfs(String begin, String target, String[] words, int count) {
         
         if (begin.equals(target)) {
-            count = c;
-            System.out.println(c);
+            result = count;
             return;
         }
         
         for (int i = 0; i < words.length; i++) {
             
-            if (visit[i]) {
-                continue;
-            }
+            if (visit[i]) continue;
             
-            int different = 0;
+            int diff = 0;
             for (int j = 0; j < begin.length(); j++) {
                 if (begin.charAt(j) != words[i].charAt(j)) {
-                    different++;
+                    diff++;
                 }
             }
             
-            if (different == 1) {
+            if (diff == 1) {
                 visit[i] = true;
-                dfs(words[i], target, words, c+1);
+                dfs(words[i], target, words, count+1);
                 visit[i] = false;
             }
         }
