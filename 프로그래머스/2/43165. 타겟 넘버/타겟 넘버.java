@@ -1,39 +1,37 @@
 import java.util.*;
 
 class Solution {
-    public int solution(int[] numbers, int target) {
+    static int answer = 0;
+    public int solution(int[] numbers, int target) {      
+        bfs(numbers, target);
         
-        return bfs(numbers, target);
+        return answer;
     }
-
-    private static int bfs(int[] numbers, int target) {
+    
+    static void bfs(int[] numbers, int target) {
+        Queue<Integer> q = new LinkedList<>();
         int x = 0;
-        int answer = 0;
-
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer(x);
-
+        
+        q.offer(x);
+        
         while (x < numbers.length) {
-
-            int length = queue.size();
-
+            
+            int length = q.size();
             for (int i = 0; i < length; i++) {
-                int q = queue.poll();
-
-                queue.offer(q - numbers[x]);
-                queue.offer(q + numbers[x]);
+                int num = q.poll();
+                
+                q.offer(num - numbers[x]);
+                q.offer(num + numbers[x]);
             }
-
+            
             x++;
         }
-
-        int length = queue.size();
-        for (int i = 0; i < length; i++) {
-            if (queue.poll() == target) {
-                answer++;
-            }
+        
+        int l = q.size();
+        for (int i = 0; i < l; i++) {
+            int n = q.poll();
+            
+            if (target == n) answer++;
         }
-
-        return answer;
     }
 }
