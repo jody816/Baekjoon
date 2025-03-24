@@ -1,18 +1,30 @@
-import java.util.Arrays;
+import java.util.*;
+
 class Solution {
+    
+    static int[] result;
     public int[] solution(int[] array, int[][] commands) {
-        int[] result = new int[commands.length];
-
-       for (int i = 0; i < result.length; i++) {
-         int[] x = new int[commands[i][1]-commands[i][0]+1];
-         int n = 0;
-         for (int j = commands[i][0]-1; j < commands[i][1]; j++) {
-           x[n++] = array[j];
-         }
-         Arrays.sort(x);
-         result[i] = x[commands[i][2]-1];
-       }
-
-       return result;
+        
+        result = new int[commands.length];
+        
+        int idx = 0;
+        O: for (int[] command : commands) {
+            
+            int first = command[0]-1;
+            int last = command[1];
+            int seq = command[2];
+            
+            int index = 0;
+            int[] check = new int[last-first];
+            for (int i = first; i < last; i++) {
+                check[index++] = array[i];
+            }
+            
+            Arrays.sort(check);
+            
+            result[idx++] = check[seq-1];
+        }
+        
+        return result;
     }
 }
