@@ -1,8 +1,11 @@
 import java.util.*;
+
 class Solution {
     public String solution(int[] numbers) {
-        String[] arr = new String[numbers.length];
         
+        StringBuilder sb = new StringBuilder();
+        
+        String[] arr = new String[numbers.length];
         for (int i = 0; i < numbers.length; i++) {
             arr[i] = String.valueOf(numbers[i]);
         }
@@ -13,10 +16,8 @@ class Solution {
             return "0";
         }
         
-        StringBuilder sb = new StringBuilder();
-        
-        for (String i : arr) {
-            sb.append(i);
+        for (String s : arr) {
+            sb.append(s);
         }
         
         return sb.toString();
