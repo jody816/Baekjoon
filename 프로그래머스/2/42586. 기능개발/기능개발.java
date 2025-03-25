@@ -1,50 +1,53 @@
 import java.util.*;
 
 class Solution {
-    
-    static Queue<Integer> q = new LinkedList<>();
-    static Queue<Integer> sp = new LinkedList<>();
-    static ArrayList<Integer> result = new ArrayList<>();
-    static int[] answer;
-    
+    static Queue<Integer> pq = new LinkedList<>();
+    static Queue<Integer> sq = new LinkedList<>();
+    static List<Integer> list = new ArrayList<>();
     public int[] solution(int[] progresses, int[] speeds) {
         for (int i = 0; i < speeds.length; i++) {
-            q.offer(progresses[i]);
-            sp.offer(speeds[i]);
+            pq.offer(progresses[i]);
+            sq.offer(speeds[i]);
         }
         
-        int count = 0;
-        while (!q.isEmpty()) {
-            if (q.peek() >= 100) {
-                count++;
-                q.poll();
-                sp.poll();
-                continue;
+        while (!pq.isEmpty()) {
+            
+            int c = pq.size();
+            
+            for (int i = 0; i < c; i++) {
+                int p = pq.poll();
+                int s = sq.poll();
+                
+                int ps = p+s;
+                
+                pq.offer(ps);
+                sq.offer(s);
             }
             
-            if (count > 0) {
-                result.add(count);
-                count = 0;
-            } else {
-                for (int i = 0; i < q.size(); i++) {
-                    int newQ = q.poll();
-                    int newSp = sp.poll();
-                    
-                    q.offer(newQ + newSp);
-                    sp.offer(newSp);
+            // System.out.println("pq: " + pq);
+            // System.out.println("sq: " + sq + "\n----------");
+            
+            int d = 0;
+            for (int i = 0; i < c; i++) {
+                if (pq.peek() >= 100) {
+                    pq.poll();
+                    sq.poll();
+                    d++;
+                } else {
+                    break;
                 }
+            }
+            
+            if (d > 0) {
+                list.add(d);
             }
         }
         
-        if (count > 0) {
-            result.add(count);
+        int[] result = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
         }
         
-        answer = new int[result.size()];
-        for (int i = 0; i < result.size(); i++) {
-            answer[i] = result.get(i);
-        }
-        
-        return answer;
+        return result;
     }
 }
