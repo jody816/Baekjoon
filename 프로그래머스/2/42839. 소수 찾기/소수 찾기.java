@@ -1,47 +1,53 @@
 import java.util.*;
 
 class Solution {
-      static String num;
-  static Set<Integer> set = new HashSet<>();
-  static String[] numArr;
-  static boolean[] visit;
-  static int answer = 0;
-
-  public int solution(String numbers) {
-    num = numbers;
-    numArr = num.split("");
-    visit = new boolean[numbers.length()];
-    dfs(0, "");
-
-    for (int i : set) {
-      int n = 0;
-
-      for (int j = 1; j <= i; j++) {
-        if (i % j == 0) {
-          n++;
+    static Set<Integer> set = new HashSet<>();
+    static String num;
+    static boolean[] visit;
+    static String[] numArr;
+    public int solution(String numbers) {
+        
+        num = numbers;
+        numArr = num.split("");
+        visit = new boolean[num.length()];
+        dfs(0, "");
+        
+        int result = 0;
+        
+        for (int i : set) {
+            if (isPrime(i)) {
+                result++;
+            }
         }
-      }
-
-      if (n == 2) {
-        answer++;
-      }
+        
+        return result;
     }
-
-    return answer;
-  }
-
-  static private void dfs(int depth, String n) {
-    if (depth == numArr.length) {
-      return;
+    
+    static void dfs(int depth, String str) {
+        if (depth == num.length()) {
+            return;
+        }
+        
+        for (int i = 0; i < numArr.length; i++) {
+            if (!visit[i]) {
+                visit[i] = true;
+                String n = str + numArr[i];
+                set.add(Integer.parseInt(n));
+                dfs(depth, n);
+                visit[i] = false;
+            }
+        }
     }
-
-    for (int i = 0; i < numArr.length; i++) {
-      if (!visit[i]) {
-        visit[i] = true;
-        set.add(Integer.parseInt(n + numArr[i]));
-        dfs(depth+1, n + numArr[i]);
-        visit[i] = false;
-      }
+    
+    static boolean isPrime(int n) {
+        if (n < 2) {
+            return false;
+        }
+        
+        for (int i = 2; i < n; i++) {
+            if (n % i == 0) return false;
+        }
+        
+        return true;
     }
-  }
 }
