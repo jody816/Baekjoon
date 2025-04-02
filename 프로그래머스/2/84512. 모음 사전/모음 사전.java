@@ -1,25 +1,24 @@
 import java.util.*;
 
 class Solution {
-    
     static List<String> list = new ArrayList<>();
-    static String[] words = new String[]{"A", "E", "I", "O", "U"};
-    
+    static String[] words = {"A", "E", "I", "O", "U"};
     public int solution(String word) {
+        int answer = 0;
         
         recur("", 0);
         
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).equals(word)) {
-                return i;
+                answer = i;
+                break;
             }
         }
         
-        return 0;
+        return answer;
     }
     
     static private void recur(String str, int depth) {
-        
         list.add(str);
         
         if (depth == 5) return;
