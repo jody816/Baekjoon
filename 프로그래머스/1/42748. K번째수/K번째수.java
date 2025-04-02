@@ -1,28 +1,24 @@
 import java.util.*;
 
 class Solution {
-    
-    static int[] result;
     public int[] solution(int[] array, int[][] commands) {
         
-        result = new int[commands.length];
-        
+        int[] result = new int[commands.length];
         int idx = 0;
-        O: for (int[] command : commands) {
-            
-            int first = command[0]-1;
+        for (int[] command : commands) {
+            int first = command[0];
             int last = command[1];
-            int seq = command[2];
+            int find = command[2];
             
-            int index = 0;
-            int[] check = new int[last-first];
-            for (int i = first; i < last; i++) {
-                check[index++] = array[i];
+            int[] arr = new int[last-first+1];
+            
+            for (int i = 0; i < arr.length; i++) {
+                arr[i] = array[first-1+i];
             }
             
-            Arrays.sort(check);
+            Arrays.sort(arr);
             
-            result[idx++] = check[seq-1];
+            result[idx++] = arr[find-1];
         }
         
         return result;
